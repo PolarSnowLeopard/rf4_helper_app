@@ -1,0 +1,8 @@
+.env
+**/__pycache__/**
+**/build/**
+**/dist/**
+**/wheels/**
+**/*.egg-info/**
+**/venv/**
+**/logs/**
