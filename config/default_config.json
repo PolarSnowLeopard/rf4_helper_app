@@ -1,0 +1,12 @@
+{
+    "api_base_url": "http://fdueblab.cn:9999/api",
+    "debug": false,
+    "language": "zh_CN",
+    "api_endpoints": {
+        "process_image": {
+            "path": "/catch_from_image",
+            "method": "POST",
+            "description": "处理图像识别鱼类"
+        }
+    }
+} 
