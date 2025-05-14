@@ -35,7 +35,7 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("俄罗斯钓鱼4助手")
-        self.setMinimumSize(1200, 800)  # 调大窗口尺寸
+        self.setMinimumSize(1920, 1080)  # 调大窗口尺寸
         # self.image_processor = ImageProcessor()  # 添加图像处理器
         self.setup_ui()
         self.process_thread = None
@@ -59,6 +59,7 @@ class MainWindow(QMainWindow):
         
         # 中部 - 分割区域
         splitter = QSplitter(Qt.Horizontal)
+        self.splitter = splitter  # 保存为实例变量
         
         # 左侧 - 图片显示区域
         image_widget = QWidget()
@@ -70,17 +71,22 @@ class MainWindow(QMainWindow):
         self.upload_btn.clicked.connect(self.upload_image)
         image_layout.addWidget(self.upload_btn)
         
+        # 限制图片显示区域宽度
+        image_widget.setMaximumWidth(960)
+        
         # 图片显示
         self.image_label = QLabel("请上传游戏截图...")
         self.image_label.setAlignment(Qt.AlignCenter)
         self.image_label.setStyleSheet("background-color: #f0f0f0; border: 1px solid #ddd;")
-        self.image_label.setMinimumSize(500, 400)  # 调大图片显示区域
+        self.image_label.setMinimumSize(960, 540)  # 调大图片显示区域
         image_layout.addWidget(self.image_label)
         
         splitter.addWidget(image_widget)
         
         # 右侧 - 结果显示区域
         results_widget = QWidget()
+        # 右侧 - 设置最小宽度
+        results_widget.setMinimumWidth(960)
         results_layout = QVBoxLayout(results_widget)
         
         results_label = QLabel("渔获分析结果")
@@ -92,10 +98,11 @@ class MainWindow(QMainWindow):
         self.results_table.setHorizontalHeaderLabels(["新鲜度", "鱼类名称", "重量", "售价"])
         # 设置表格列宽
         header = self.results_table.horizontalHeader()
-        header.setSectionResizeMode(0, QHeaderView.ResizeToContents)
-        header.setSectionResizeMode(1, QHeaderView.Stretch)
-        header.setSectionResizeMode(2, QHeaderView.ResizeToContents)
-        header.setSectionResizeMode(3, QHeaderView.ResizeToContents)
+        header.setSectionResizeMode(QHeaderView.Stretch)  # 所有列等宽拉伸
+        # header.setSectionResizeMode(0, QHeaderView.ResizeToContents)
+        # header.setSectionResizeMode(1, QHeaderView.Stretch)
+        # header.setSectionResizeMode(2, QHeaderView.ResizeToContents)
+        # header.setSectionResizeMode(3, QHeaderView.ResizeToContents)
         
         results_layout.addWidget(self.results_table)
         
@@ -105,6 +112,9 @@ class MainWindow(QMainWindow):
         # 底部状态区域
         self.status_label = QLabel("准备就绪")
         main_layout.addWidget(self.status_label)
+
+        # 设置初始宽度比例 (左:右 = 2:3)
+        # splitter.setSizes([2, 3])
     
     def upload_image(self):
         file_path, _ = QFileDialog.getOpenFileName(
@@ -143,6 +153,8 @@ class MainWindow(QMainWindow):
         self.progress_dialog = QProgressDialog("正在处理图片...", "取消", 0, 0, self)
         self.progress_dialog.setWindowTitle("请稍候")
         self.progress_dialog.setWindowModality(Qt.WindowModal)
+        # 设置对话框尺寸
+        self.progress_dialog.resize(400, 150)  # 宽400，高150
         self.progress_dialog.show()
         
         # 创建并启动处理线程
